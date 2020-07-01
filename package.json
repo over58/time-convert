@@ -74,7 +74,7 @@
       },
       {
         "command":"time-convert.nodeDependencies.editEntry",
-        "title": "time-convert.nodeDependencies.editEntry",
+        "title": "Edit",
         "icon":{
           "light": "resources/edit.svg",
           "dark": "resources/edit.svg"
@@ -82,11 +82,15 @@
       },
       {
         "command":"time-convert.nodeDependencies.deleteEntry",
-        "title": "time-convert.nodeDependencies.deleteEntry",
+        "title": "Delete",
         "icon":{
           "light": "resources/delete.svg",
           "dark": "resources/delete.svg"
         }
+      },
+      {
+        "command":"time-convert.nodeDependencies.openPackageOnNpm",
+        "title": "time-convert.nodeDependencies.openPackageOnNpm"
       }
     ],
     "keybindings": [

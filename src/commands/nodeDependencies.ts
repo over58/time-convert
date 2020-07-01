@@ -4,7 +4,12 @@ import * as path from 'path';
 
 class Dependency extends vscode.TreeItem{
   
-  constructor (public readonly label:string, private version: string, public readonly collapsibleState: vscode.TreeItemCollapsibleState) {
+  constructor (
+    public readonly label:string, 
+    private version: string, 
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState, 
+    public readonly command?: vscode.Command
+  ) {
     super(label, collapsibleState);
   }
 
@@ -21,7 +26,6 @@ class Dependency extends vscode.TreeItem{
     dark: path.join(__filename, '..','..','resources', 'dependency.svg')
   };
 
-  
   // package.json menus  view/item/context  viewItem
   contextValue = 'dependency';
 
@@ -51,10 +55,12 @@ class NodeDependenciesProvider implements vscode.TreeDataProvider<Dependency> {
       return Promise.resolve([]);
     }
     if(dep) {
+      // 有依赖的话
       return Promise.resolve(this.getDepsInPackageJson(
         path.join(this.workspaceRoot, 'node_modules', dep.label, 'package.json')
       ));
     }else{
+      console.log('初始化的时候没依赖');
       const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
       if(this.pathExists(packageJsonPath)) {
         return Promise.resolve(this.getDepsInPackageJson(packageJsonPath));
@@ -73,7 +79,16 @@ class NodeDependenciesProvider implements vscode.TreeDataProvider<Dependency> {
         if(this.pathExists(path.join(this.workspaceRoot, 'node_modules', moduleName))) {
           return new Dependency(moduleName, version, vscode.TreeItemCollapsibleState.Collapsed);
         }else{
-          return new Dependency(moduleName, version, vscode.TreeItemCollapsibleState.None);
+          return new Dependency(
+            moduleName, 
+            version, 
+            vscode.TreeItemCollapsibleState.None, 
+            {
+              command: 'time-convert.nodeDependencies.openPackageOnNpm',
+              title: 'npmjs网站中打开 npm package',
+              arguments: [moduleName]
+            }
+          );
         }
       };
       const deps = packageJson.dependencies 
@@ -121,6 +136,7 @@ export default function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('time-convert.nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
   vscode.commands.registerCommand('time-convert.nodeDependencies.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
   vscode.commands.registerCommand('time-convert.nodeDependencies.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
-	vscode.commands.registerCommand('time-convert.nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
+  vscode.commands.registerCommand('time-convert.nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
+  vscode.commands.registerCommand('time-convert.nodeDependencies.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
 
 }
