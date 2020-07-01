@@ -1,26 +1,33 @@
 {
-	"name": "time-convert",
-	"displayName": "time-convert",
-	"description": "",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.46.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
+  "name": "time-convert",
+  "displayName": "time-convert",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
     "onCommand:time-convert.helloWorld",
     "onCommand:time-convert.getCurFilePath",
     "onCommand:time-convert.testEditorCommand",
     "onLanguage:json",
     "onCommand:time-convert.openWebview",
-    "onCommand:time-convert.timeReadable"
-	],
+    "onCommand:time-convert.timeReadable",
+    "onView:nodeDependencies",
+    "onCommand:time-convert.startTask",
+    "onCommand:time-convert.createNote",
+    "onCommand:time-convert.nodeDependencies.refreshEntry",
+    "onCommand:time-convert.nodeDependencies.addEntry",
+    "onCommand:time-convert.nodeDependencies.editEntry",
+    "onCommand:time-convert.nodeDependencies.deleteEntry"
+  ],
   "main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
+  "contributes": {
+    "commands": [
+      {
         "command": "time-convert.helloWorld",
         "title": "hello World"
       },
@@ -39,19 +46,60 @@
       {
         "command": "time-convert.timeReadable",
         "title": "time-convert.timeReadable"
+      },
+      {
+        "command": "time-convert.startTask",
+        "title": "time-convert.startTask"
+      },
+      {
+        "command": "time-convert.createNote",
+        "title": "time-convert.createNote",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command":"time-convert.nodeDependencies.refreshEntry",
+        "title": "time-convert.nodeDependencies.refreshEntry",
+        "icon":{
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command":"time-convert.nodeDependencies.addEntry",
+        "title": "time-convert.nodeDependencies.addEntry",
+        "icon":{
+          "light": "resources/add.svg",
+          "dark": "resources/add.svg"
+        }
+      },
+      {
+        "command":"time-convert.nodeDependencies.editEntry",
+        "title": "time-convert.nodeDependencies.editEntry",
+        "icon":{
+          "light": "resources/edit.svg",
+          "dark": "resources/edit.svg"
+        }
+      },
+      {
+        "command":"time-convert.nodeDependencies.deleteEntry",
+        "title": "time-convert.nodeDependencies.deleteEntry",
+        "icon":{
+          "light": "resources/delete.svg",
+          "dark": "resources/delete.svg"
+        }
       }
     ],
     "keybindings": [
       {
         "command": "time-convert.helloWorld",
-        "key":"ctrl+f10",
-        "mac":"cmd+f10",
-        "when":"editorTextFocus"
+        "key": "ctrl+f10",
+        "mac": "cmd+f10",
+        "when": "editorTextFocus"
       },
       {
         "command": "time-convert.testEditorCommand",
-        "key":"ctrl+f11",
-        "mac":"cmd+f11"
+        "key": "ctrl+f11",
+        "mac": "cmd+f11"
       }
     ],
     "menus": {
@@ -62,7 +110,7 @@
           "group": "navigation"
         },
         {
-           "when": "editorFocus",
+          "when": "editorFocus",
           "command": "time-convert.getCurFilePath",
           "group": "navigation"
         }
@@ -72,28 +120,82 @@
           "command": "time-convert.getCurFilePath",
           "group": "navigation"
         }
+      ],
+      "commandPalette": [
+      ],
+      "view/title": [
+        {
+          "command": "time-convert.nodeDependencies.refreshEntry",
+          "group": "navigation",
+          "when": "view == nodeDependencies"
+        },
+        {
+          "command": "time-convert.nodeDependencies.addEntry",
+          "group": "navigation",
+          "when": "view == nodeDependencies"
+        }
+      ],
+      "view/item/context": [
+				{
+					"command": "time-convert.nodeDependencies.editEntry",
+					"when": "view == nodeDependencies && viewItem == dependency",
+					"group": "inline"
+				},
+				{
+					"command": "time-convert.nodeDependencies.deleteEntry",
+          "when": "view == nodeDependencies && viewItem == dependency",
+          "group": "inline"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "package-explorer",
+          "title": "Dep",
+          "icon":"resources/outline.svg"
+        }
+      ],
+      "panel": [
+        {
+          "id": "package-explorer",
+          "title": "Dep panel",
+          "icon": "resources/outline.svg"
+        }
+      ]
+    },
+    "views": {
+      "package-explorer": [
+        {
+          "id": "nodeDependencies",
+          "name": "Node",
+          "icon": "resources/outline.svg",
+          "contextualTitle": "AAAA"
+        }
       ]
     }
-	},
-	"scripts": {
-		"vscode:prepublish": "yarn run compile",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "yarn run compile && yarn run lint",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.46.0",
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^7.0.2",
-		"@types/node": "^13.11.0",
-		"eslint": "^6.8.0",
-		"@typescript-eslint/parser": "^2.30.0",
-		"@typescript-eslint/eslint-plugin": "^2.30.0",
-		"glob": "^7.1.6",
-		"mocha": "^7.1.2",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.3.0"
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "@types/vscode": "^1.46.0",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "copy-webpack-plugin": "^6.0.2",
+    "eslint": "^6.8.0",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6",
+    "mocha": "^7.1.2",
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.3.0"
   }
 }

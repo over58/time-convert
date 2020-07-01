@@ -4,6 +4,9 @@ import * as vscode from 'vscode';
 import hover from './commands/hover';
 import webview from './commands/webview';
 import timeReadable from './commands/timeReadable';
+import progress from './commands/progress';
+import comments from './commands/comments';
+import nodeDependencies from './commands/nodeDependencies';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -28,6 +31,10 @@ export function activate(context: vscode.ExtensionContext) {
   hover(context);
   webview(context);
   timeReadable(context);
+
+  progress(context);
+  comments(context);
+  nodeDependencies(context);
 
   context.subscriptions.push(helloDisposable, getCurFilePathDisposable);
   

@@ -1,0 +1,22 @@
+@import './bootstrap.min.css';
+
+.wrapper{
+  margin:0 auto;
+  width: 400px;
+}
+.divider{
+  display: flex;
+  height: 30px;
+  align-items: center;
+  color: #495057;
+  font-size: 20px;
+}
+.divider::before,.divider::after{
+  content: ' ';;
+  height: 1px;
+  flex: 1;
+  background: #dfdfdf;
+}
+.divider>.title{
+  padding: 0 10px;
+}
