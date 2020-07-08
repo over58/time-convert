@@ -3,6 +3,7 @@
   "displayName": "time-convert",
   "description": "",
   "version": "0.0.1",
+  "publisher": "2658553345",
   "engines": {
     "vscode": "^1.46.0"
   },
